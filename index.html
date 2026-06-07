@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="习近平新时代中国特色社会主义思想概论章节刷题与时间线复习">
+  <title>习概章节刷题｜全题库</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <h1>习近平新时代中国特色社会主义思想概论</h1>
+    <p>章节固定 · 章内随机 · 单选、多选、判断全覆盖</p>
+  </div>
+  <div class="top-actions">
+    <button id="quizBtn" class="active-action">章节刷题</button>
+    <button id="timelineBtn">时间线</button>
+  </div>
+</header>
+<nav id="chapterTabs" aria-label="章节选择"></nav>
+<main>
+  <section id="quiz" class="panel">
+    <div class="quiz-toolbar">
+      <button id="prevBtn" class="light">← 上一题</button>
+      <div class="toolbar-center">
+        <span id="chapterName"></span>
+        <span id="progress"></span>
+      </div>
+      <button id="nextBtn">下一题 →</button>
+    </div>
+    <div class="question-card">
+      <div class="question-head">
+        <span class="badge" id="typeName"></span>
+        <button id="reshuffleBtn" class="tiny light">重新随机本章</button>
+      </div>
+      <h2 id="stem"></h2>
+      <div id="options"></div>
+      <div id="submitArea" class="submit-area">
+        <button id="submitBtn">提交答案</button>
+        <button id="clearBtn" class="light">清空选择</button>
+      </div>
+      <div id="result" class="result hidden"></div>
+    </div>
+  </section>
+
+  <section id="timeline" class="panel hidden">
+    <div class="timeline-title">
+      <div>
+        <h2>重要时间线</h2>
+        <p>重点记忆“什么时间、什么会议、提出或完成了什么”。</p>
+      </div>
+      <input id="timelineSearch" placeholder="搜索：十七大、小康、国家安全、2035……">
+    </div>
+    <div class="memory-card">
+      <b>高频口诀</b>
+      <p>十一届三中开改革，十二大会提小康；十五大依法治国，十六大全面小康；十七大提高要求，十八大生态入布局；十八届三中深改革，十九大两步现代化；十九届四中讲制度，二十大推进中国式现代化。</p>
+    </div>
+    <div id="timelineList" class="timeline-list"></div>
+  </section>
+</main>
+<footer>纯静态网页，可直接部署到 GitHub Pages。题目来自上传的课程题库。</footer>
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

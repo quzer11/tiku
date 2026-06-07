@@ -41,7 +41,6 @@ function renderQuiz(){
   state.selected=new Set(); state.submitted=false;
   document.getElementById('result').className='result hidden';
   document.getElementById('result').innerHTML='';
-  document.getElementById('submitBtn').disabled=false;
 }
 function toggleOption(label){
   if(state.submitted)return;
@@ -52,21 +51,27 @@ function toggleOption(label){
     state.selected=new Set([label]);
   }
   document.querySelectorAll('.option').forEach(btn=>btn.classList.toggle('selected',state.selected.has(btn.dataset.label)));
+  checkAnswer();
 }
-function submitAnswer(){
-  if(!state.selected.size){showResult('请先选择答案。','notice');return;}
-  const q=current(); const ok=sameAnswer(state.selected,new Set(q.answer)); state.submitted=true;
+function checkAnswer(){
+  const q=current();
+  if(!state.selected.size)return;
+  if(q.type==='多项选择题'&&state.selected.size<q.answer.length)return;
+  const ok=sameAnswer(state.selected,new Set(q.answer)); state.submitted=true;
   document.querySelectorAll('.option').forEach(btn=>{
     const label=btn.dataset.label;
     btn.classList.toggle('correct',q.answer.includes(label));
     btn.classList.toggle('wrong',state.selected.has(label)&&!q.answer.includes(label));
   });
   showResult(ok?`回答正确！答案：${q.answer.join('、')}`:`回答错误。正确答案：${q.answer.join('、')}`,ok?'good':'bad');
-  document.getElementById('submitBtn').disabled=true;
 }
 function showResult(text,type){const box=document.getElementById('result');box.textContent=text;box.className=`result ${type}`;}
 function clearSelection(){if(state.submitted)return;state.selected.clear();document.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));}
-function next(){if(state.index<state.order.length-1){state.index++;renderQuiz();}else{state.order=shuffle(state.order);state.index=0;renderQuiz();showResult('本章已完成，已重新随机。','notice');}}
+function next(){
+  if(state.index<state.order.length-1){state.index++;renderQuiz();return;}
+  const idx=chapters.findIndex(c=>c.id===state.chapter);
+  setChapter(chapters[(idx+1)%chapters.length].id);
+}
 function prev(){state.index=(state.index-1+state.order.length)%state.order.length;renderQuiz();}
 function showQuiz(){document.getElementById('quiz').classList.remove('hidden');document.getElementById('timeline').classList.add('hidden');document.getElementById('quizBtn').classList.add('active-action');document.getElementById('timelineBtn').classList.remove('active-action');document.getElementById('chapterTabs').classList.remove('hidden');}
 function showTimeline(){document.getElementById('quiz').classList.add('hidden');document.getElementById('timeline').classList.remove('hidden');document.getElementById('quizBtn').classList.remove('active-action');document.getElementById('timelineBtn').classList.add('active-action');document.getElementById('chapterTabs').classList.add('hidden');renderTimeline();}
@@ -78,7 +83,6 @@ function renderTimeline(){
 
 document.getElementById('prevBtn').onclick=prev;
 document.getElementById('nextBtn').onclick=next;
-document.getElementById('submitBtn').onclick=submitAnswer;
 document.getElementById('clearBtn').onclick=clearSelection;
 document.getElementById('reshuffleBtn').onclick=()=>setChapter(state.chapter);
 document.getElementById('quizBtn').onclick=showQuiz;
@@ -89,6 +93,5 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('quiz').classList.contains('hidden'))return;
   if(e.key==='ArrowRight')next(); else if(e.key==='ArrowLeft')prev();
   else if(/^[1-5]$/.test(e.key)){const btn=document.querySelectorAll('#options .option')[Number(e.key)-1];if(btn)btn.click();}
-  else if(e.key==='Enter')submitAnswer();
 });
 setChapter(chapters[0].id);renderTimeline();

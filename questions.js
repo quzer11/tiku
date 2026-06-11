@@ -12019,7 +12019,7 @@ const QUESTION_BANK = {
         }
       ],
       "answer": [
-        "B"
+        "C"
       ]
     },
     {
